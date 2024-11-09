@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen Interactivo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+        }
+        .pregunta {
+            margin-bottom: 15px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .resultado {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Examen Interactivo</h1>
+    <form id="examenForm">
+        <!-- Preguntas se insertarán aquí -->
+    </form>
+    <button onclick="verificarRespuestas()">Verificar Respuestas</button>
+    <div class="resultado" id="resultado"></div>
+
+    <script>
+        const preguntas = [
+            // Preguntas de Humanidades
+            {
+                pregunta: "¿Qué es la filosofía?",
+                opciones: ["A) Estudio de los animales.", "B) Reflexión sobre preguntas fundamentales.", 
+                           "C) Análisis de datos estadísticos.", "D) Práctica artística."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué abarca la antropología?",
+                opciones: ["A) Solo la prehistoria.", "B) Culturas, sociedades y evolución humana.", 
+                           "C) La física del comportamiento humano.", "D) La historia de la literatura."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es la diferencia entre historia e historiografía?",
+                opciones: ["A) No hay diferencia.", "B) Historia es el estudio del pasado, y historiografía es su interpretación.", 
+                           "C) Historia solo estudia guerras.", "D) Historiografía se refiere a documentos antiguos."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué papel juega la literatura en el entendimiento de la condición humana?",
+                opciones: ["A) Solo es entretenimiento.", "B) Ofrece perspectivas sobre la vida y la sociedad.", 
+                           "C) No tiene relevancia.", "D) Es solo un reflejo de hechos históricos."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cómo influyen las culturas en la formación de identidades?",
+                opciones: ["A) De ninguna manera.", "B) A través de tradiciones, valores y creencias.", 
+                           "C) Solo por medio de la religión.", "D) Únicamente a través del lenguaje."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué son las ciencias sociales?",
+                opciones: ["A) Estudio de los fenómenos naturales.", "B) Disciplinas que estudian el comportamiento humano y las sociedades.", 
+                           "C) Una forma de literatura.", "D) Exclusivamente investigación histórica."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es la función del arte en la sociedad?",
+                opciones: ["A) Solo decoración.", "B) Expresión de ideas, emociones y críticas sociales.", 
+                           "C) Simplemente entretenimiento.", "D) Ninguna, es irrelevante."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué impacto tiene la religión en las culturas contemporáneas?",
+                opciones: ["A) Ninguno, es obsoleta.", "B) Puede influir en valores, tradiciones y conflictos.", 
+                           "C) Solo afecta a comunidades cerradas.", "D) Es solo un fenómeno del pasado."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cómo se estudia el lenguaje desde una perspectiva humanística?",
+                opciones: ["A) Solo como un sistema de comunicación.", "B) Como un medio que refleja cultura y pensamiento.", 
+                           "C) Exclusivamente por su gramática.", "D) Solo a través de la literatura."],
+                respuesta_correcta: "B"
+            },
+            // Preguntas de Inglés
+            {
+                pregunta: "¿Cuál es el tiempo verbal de la frase: 'She is eating'?",
+                opciones: ["A) Pasado simple", "B) Presente continuo", "C) Futuro simple", "D) Pasado continuo"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué significa 'to run out of something'?",
+                opciones: ["A) Encontrar algo", "B) Gastar completamente algo", "C) Huir de un lugar", "D) Correr hacia algo"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el adjetivo comparativo de 'good'?",
+                opciones: ["A) Gooder", "B) Best", "C) Better", "D) Goodest"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué es un 'synonym'?",
+                opciones: ["A) Una palabra opuesta", "B) Una palabra con el mismo significado", "C) Una palabra en otro idioma", "D) Una palabra inventada"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cómo se forma una pregunta en pasado simple?",
+                opciones: ["A) ¿Did she go?", "B) ¿Goes she?", "C) ¿Is she going?", "D) ¿Did she gone?"],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Qué significa 'to take something for granted'?",
+                opciones: ["A) Apreciar algo", "B) No valorar algo adecuadamente", "C) Tomar algo prestado", "D) Asumir algo sin preguntar"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es la forma correcta del verbo en la siguiente frase: 'He usually ____ to the gym.'?",
+                opciones: ["A) Go", "B) Goes", "C) Going", "D) Gone"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es la función de una preposición?",
+                opciones: ["A) Indicar tiempo, lugar o dirección", "B) Sustituir un sustantivo", "C) Conjugar un verbo", "D) Crear oraciones interrogativas"],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Cuál es el pasado de 'go'?",
+                opciones: ["A) Goed", "B) Gone", "C) Went", "D) Going"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué es un 'idiom'?",
+                opciones: ["A) Un tipo de poesía", "B) Una expresión cuya significado no es literal", "C) Un nombre propio", "D) Un sustantivo común"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es la forma correcta en futuro simple de: 'They ____ (to travel) to Paris'?",
+                opciones: ["A) Will travel", "B) Travels", "C) Travelled", "D) Are traveling"],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Qué tipo de palabra es 'quickly'?",
+                opciones: ["A) Sustantivo", "B) Adjetivo", "C) Verbo", "D) Adverbio"],
+                respuesta_correcta: "D"
+            },
+            {
+                pregunta: "¿Cómo se dice 'gracias' en inglés?",
+                opciones: ["A) Please", "B) Thank you", "C) Sorry", "D) Excuse me"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué significa 'to be on the same page'?",
+                opciones: ["A) Estar de acuerdo", "B) Leer lo mismo", "C) Estar en conflicto", "D) Compartir libros"],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Cuál es la forma correcta de 'I have ___ (a) apple'?",
+                opciones: ["A) An", "B) The", "C) One", "D) Some"],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Cuál es la contracción de 'they are'?",
+                opciones: ["A) They’re", "B) Their", "C) Theys", "D) They is"],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Cuál es el plural de 'child'?",
+                opciones: ["A) Childs", "B) Children", "C) Childer", "D) Childes"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es un 'conjunction'?",
+                opciones: ["A) Una palabra que une frases o palabras", "B) Un tipo de verbo", "C) Un sinónimo", "D) Un adjetivo"],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Cuál es la forma correcta en pasado de 'eat'?",
+                opciones: ["A) Eated", "B) Eaten", "C) Ate", "D) Eating"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué es un 'compound sentence'?",
+                opciones: ["A) Una oración que contiene un solo sujeto", "B) Una oración con dos o más cláusulas independientes", "C) Una oración sin verbo", "D) Una oración muy corta"],
+                respuesta_correcta: "B"
+            },
+            // Preguntas de Matemáticas
+            {
+                pregunta: "¿Cuál es el valor de 7 + 3?",
+                opciones: ["A) 9", "B) 10", "C) 11", "D) 12"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el resultado de 15 − 6?",
+                opciones: ["A) 8", "B) 9", "C) 7", "D) 10"],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Qué es un número primo?",
+                opciones: ["A) Un número que solo es divisible por 1 y por sí mismo.", "B) Un número que tiene más de dos divisores.", 
+                           "C) Un número par.", "D) Un número entero negativo."],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Cuánto es 8 × 7?",
+                opciones: ["A) 54", "B) 56", "C) 58", "D) 60"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es la raíz cuadrada de 81?",
+                opciones: ["A) 7", "B) 8", "C) 9", "D) 10"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Cuál es el área de un triángulo con base de 10 y altura de 5?",
+                opciones: ["A) 25", "B) 30", "C) 50", "D) 75"],
+                respuesta_correcta: "A" // Área = 1/2 × base × altura
+            },
+            {
+                pregunta: "¿Qué representa el término 'media' en estadística?",
+                opciones: ["A) El valor más alto de un conjunto.", "B) El valor más bajo de un conjunto.", 
+                           "C) La suma de todos los valores dividida por el número de valores.", "D) La diferencia entre el valor más alto y el más bajo."],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Cuál es el perímetro de un cuadrado con lados de 4 cm?",
+                opciones: ["A) 8 cm", "B) 12 cm", "C) 16 cm", "D) 20 cm"],
+                respuesta_correcta: "C" // Perímetro = 4 × lado
+            },
+            {
+                pregunta: "¿Qué es una fracción equivalente a 1/2?",
+                opciones: ["A) 2/3", "B) 3/6", "C) 4/5", "D) 5/8"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el valor de 2^3?",
+                opciones: ["A) 6", "B) 8", "C) 9", "D) 10"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es un ángulo recto?",
+                opciones: ["A) Un ángulo de 90 grados.", "B) Un ángulo de 180 grados.", 
+                           "C) Un ángulo de 45 grados.", "D) Un ángulo de 360 grados."],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Cuál es el resultado de 12 ÷ 4?",
+                opciones: ["A) 2", "B) 3", "C) 4", "D) 6"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuánto es 5 + 3 × 2?",
+                opciones: ["A) 11", "B) 16", "C) 13", "D) 10"],
+                respuesta_correcta: "A" // Debido a la jerarquía de operaciones
+            },
+            {
+                pregunta: "¿Qué es un polígono?",
+                opciones: ["A) Una figura con cuatro lados.", "B) Una figura cerrada con tres o más lados.", 
+                           "C) Una figura con lados curvos.", "D) Una figura con solo un lado."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el valor de 9 − (3 + 4)?",
+                opciones: ["A) 1", "B) 2", "C) 3", "D) 0"],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Cuántos grados hay en un círculo completo?",
+                opciones: ["A) 180", "B) 270", "C) 360", "D) 400"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué es la mediana en un conjunto de datos?",
+                opciones: ["A) El valor más frecuente.", "B) El valor en el medio cuando están ordenados.", 
+                           "C) La suma de todos los valores.", "D) El valor más alto."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el resultado de 4^2?",
+                opciones: ["A) 8", "B) 12", "C) 16", "D) 18"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué tipo de gráfico se usa para mostrar proporciones?",
+                opciones: ["A) Gráfico de barras", "B) Gráfico de líneas", "C) Gráfico circular", "D) Histograma"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Cuál es la fórmula del área de un círculo?",
+                opciones: ["A) π × r²", "B) 2πr", "C) 1/2 bh", "D) l × w"],
+                respuesta_correcta: "A"
+            },
+            // Preguntas de Español
+            {
+                pregunta: "¿Cuál es la capital de España?",
+                opciones: ["A) Barcelona", "B) Madrid", "C) Sevilla", "D) Valencia"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué tipo de palabra es 'rápido'?",
+                opciones: ["A) Sustantivo", "B) Adjetivo", "C) Verbo", "D) Adverbio"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es la conjugación correcta del verbo 'comer' en primera persona del singular del presente?",
+                opciones: ["A) Como", "B) Comí", "C) Comeré", "D) Comiendo"],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Cuál es el antónimo de 'feliz'?",
+                opciones: ["A) Alegre", "B) Contento", "C) Triste", "D) Satisfecho"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué es un adjetivo?",
+                opciones: ["A) Una palabra que describe a un sustantivo.", "B) Una palabra que expresa acción.", 
+                           "C) Una palabra que une frases.", "D) Una palabra que indica lugar."],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Cuál es el tiempo verbal de 'Ella había terminado su tarea'?",
+                opciones: ["A) Pasado simple", "B) Futuro perfecto", "C) Pretérito pluscuamperfecto", "D) Presente continuo"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Cuál de las siguientes frases es gramaticalmente correcta?",
+                opciones: ["A) Ellos va al cine.", "B) Nosotros vamos al parque.", "C) Yo iré a casa.", "D) Tú ha llegado tarde."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es un sinónimo de 'hermoso'?",
+                opciones: ["A) Feo", "B) Bello", "C) Horrendo", "D) Triste"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es la forma correcta de escribir la primera persona del singular del verbo 'haber' en presente?",
+                opciones: ["A) He", "B) Has", "C) Ha", "D) Hamos"],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Qué significa la palabra 'biblioteca'?",
+                opciones: ["A) Lugar donde se venden libros.", "B) Lugar donde se prestan libros.", 
+                           "C) Lugar donde se estudia.", "D) Lugar donde se escriben libros."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es un sustantivo?",
+                opciones: ["A) Una palabra que describe una acción.", "B) Una palabra que nombra personas, lugares, cosas o ideas.", 
+                           "C) Una palabra que conecta oraciones.", "D) Una palabra que indica tiempo."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es la forma correcta del verbo 'hacer' en tercera persona del singular del presente?",
+                opciones: ["A) Hago", "B) Haces", "C) Hace", "D) Hacía"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué es una oración compuesta?",
+                opciones: ["A) Una oración con un solo verbo.", "B) Una oración que contiene más de una proposición.", 
+                           "C) Una oración que no tiene sentido.", "D) Una oración muy corta."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el plural de 'lápiz'?",
+                opciones: ["A) Lápices", "B) Lápizs", "C) Lápizes", "D) Lápiceses"],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Qué significa 'andar' en español?",
+                opciones: ["A) Volar", "B) Caminar", "C) Saltar", "D) Correr"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el modo verbal que expresa una acción como un hecho?",
+                opciones: ["A) Subjuntivo", "B) Imperativo", "C) Indicativo", "D) Infinitivo"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué es un pronombre?",
+                opciones: ["A) Una palabra que reemplaza a un sustantivo.", "B) Una palabra que expresa tiempo.", 
+                           "C) Una palabra que indica acción.", "D) Una palabra que describe una característica."],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Cuál es la forma correcta de escribir 'tú' en el contexto de un saludo?",
+                opciones: ["A) Tu", "B) Tú", "C) Tù", "D) Tu'"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es un adverbio?",
+                opciones: ["A) Una palabra que modifica un verbo, adjetivo o otro adverbio.", "B) Una palabra que nombra personas o cosas.", 
+                           "C) Una palabra que expresa sentimientos.", "D) Una palabra que une oraciones."],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Cuál de las siguientes es una figura literaria?",
+                opciones: ["A) La metáfora", "B) El sustantivo", "C) El adjetivo", "D) La oración"],
+                respuesta_correcta: "A"
+            },
+            // Preguntas de Tutorías
+            {
+                pregunta: "¿Cuál es el principal objetivo de las tutorías?",
+                opciones: ["A) Evaluar a los estudiantes.", "B) Proporcionar apoyo académico y personal.", 
+                           "C) Organizar actividades extracurriculares.", "D) Enseñar materias específicas."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué tipo de tutoría se enfoca en ayudar a los estudiantes a mejorar sus habilidades académicas?",
+                opciones: ["A) Tutoría social", "B) Tutoría emocional", "C) Tutoría académica", "D) Tutoría profesional"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Cuál es una de las habilidades más importantes que debe tener un tutor?",
+                opciones: ["A) Ser autoritario", "B) Escuchar activamente", "C) Hablar mucho", "D) Ser indiferente"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es una tutoría grupal?",
+                opciones: ["A) Una sesión individual con un tutor.", "B) Una sesión en la que un tutor trabaja con varios estudiantes.", 
+                           "C) Una clase regular.", "D) Un examen grupal."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es un indicador de que un estudiante puede necesitar tutoría?",
+                opciones: ["A) Siempre llega a tiempo.", "B) Participa activamente en clase.", 
+                           "C) Baja calificación en un examen.", "D) No tiene amigos."],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Cuál es el papel del tutor en la tutoría emocional?",
+                opciones: ["A) Ayudar a los estudiantes a resolver problemas académicos.", 
+                           "B) Brindar apoyo y orientación emocional.", "C) Supervisar exámenes.", "D) Dar clases magistrales."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué se debe hacer antes de una sesión de tutoría?",
+                opciones: ["A) Ignorar las necesidades del estudiante.", "B) Preparar un plan de estudio.", 
+                           "C) Asegurarse de que el estudiante no tenga preguntas.", "D) Hacer un examen sorpresa."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué estrategia es útil para fomentar la participación activa de los estudiantes en las tutorías?",
+                opciones: ["A) Hacer preguntas cerradas.", "B) Fomentar un ambiente de confianza.", 
+                           "C) Dar instrucciones estrictas.", "D) Evitar la interacción."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué debe incluir un plan de tutoría efectivo?",
+                opciones: ["A) Solo contenido académico.", "B) Objetivos claros y actividades variadas.", 
+                           "C) Estrategias de evaluación estrictas.", "D) Un cronograma riguroso sin flexibilidad."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cómo se puede medir el éxito de una tutoría?",
+                opciones: ["A) A través de las calificaciones finales.", "B) Mediante la satisfacción del estudiante y su progreso.", 
+                           "C) Comparando con otros estudiantes.", "D) Solo por la asistencia."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué tipo de preguntas son más efectivas en una tutoría?",
+                opciones: ["A) Preguntas de sí o no.", "B) Preguntas abiertas que fomentan la reflexión.", 
+                           "C) Preguntas triviales.", "D) Preguntas que solo requieren memoria."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es un recurso útil para los tutores?",
+                opciones: ["A) Ignorar las herramientas digitales.", "B) Utilizar materiales de apoyo y recursos en línea.", 
+                           "C) Solo usar libros de texto.", "D) No utilizar recursos externos."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué significa 'adaptar la tutoría' a las necesidades del estudiante?",
+                opciones: ["A) Mantener el mismo enfoque para todos.", "B) Personalizar el enfoque y las actividades según el estudiante.", 
+                           "C) Cambiar el horario frecuentemente.", "D) No hacer cambios en el plan original."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es la 'tutoría entre pares'?",
+                opciones: ["A) Un profesor que tutoriza a un estudiante.", "B) Un estudiante que ayuda a otro estudiante.", 
+                           "C) Un grupo de estudiantes sin tutor.", "D) Una clase de refuerzo."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es la importancia de la comunicación en la tutoría?",
+                opciones: ["A) Es irrelevante.", "B) Facilita la comprensión y el vínculo entre tutor y estudiante.", 
+                           "C) Solo debe ser formal.", "D) No es necesaria si hay buenos materiales."],
+                respuesta_correcta: "B"
+            },
+            // Preguntas de Ecosistemas
+            {
+                pregunta: "¿Qué es un ecosistema?",
+                opciones: ["A) Un conjunto de organismos en un solo lugar.", "B) La interacción entre organismos y su ambiente físico.", 
+                           "C) Un tipo de organismo.", "D) Un fenómeno natural."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el principal productor en un ecosistema terrestre?",
+                opciones: ["A) Animales herbívoros", "B) Animales carnívoros", "C) Plantas", "D) Descomponedores"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué función tienen los descomponedores en un ecosistema?",
+                opciones: ["A) Producir energía.", "B) Comer otros organismos.", "C) Descomponer materia orgánica y reciclar nutrientes.", "D) Ayudar en la fotosíntesis."],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué es un bioma?",
+                opciones: ["A) Un ecosistema pequeño.", "B) Una región ecológica caracterizada por su clima y flora.", 
+                           "C) Un tipo de animal.", "D) Un fenómeno meteorológico."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál de las siguientes es una característica de un ecosistema acuático?",
+                opciones: ["A) Alta concentración de dióxido de carbono.", "B) Presencia de agua.", 
+                           "C) Suelo seco.", "D) Clima árido."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es la biodiversidad?",
+                opciones: ["A) La cantidad de un solo tipo de organismo.", "B) La variedad de especies en un ecosistema.", 
+                           "C) La calidad del aire.", "D) La cantidad de agua en un ecosistema."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué tipo de relación se establece entre un depredador y su presa?",
+                opciones: ["A) Simbiosis", "B) Mutualismo", "C) Depredación", "D) Competencia"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Cuál de los siguientes es un ejemplo de un ecosistema?",
+                opciones: ["A) Un desierto", "B) Un lago", "C) Un bosque", "D) Todas las anteriores"],
+                respuesta_correcta: "D"
+            },
+            {
+                pregunta: "¿Qué es un nicho ecológico?",
+                opciones: ["A) El lugar donde vive un organismo.", "B) La función que desempeña un organismo en su ecosistema.", 
+                           "C) Una especie en peligro de extinción.", "D) Un tipo de bioma."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué tipo de organismos son los herbívoros?",
+                opciones: ["A) Organismos que solo consumen plantas.", "B) Organismos que solo consumen carne.", 
+                           "C) Organismos que descomponen materia orgánica.", "D) Organismos que producen su propia energía."],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Cuál es el impacto de la deforestación en un ecosistema?",
+                opciones: ["A) Aumento de la biodiversidad.", "B) Reducción de hábitats y especies.", 
+                           "C) Mejora de la calidad del aire.", "D) Aumento de la producción de oxígeno."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es la cadena alimentaria?",
+                opciones: ["A) Una secuencia de eventos que muestran cómo se descomponen los organismos.", 
+                           "B) Una serie de organismos que se alimentan unos de otros.", "C) Un tipo de relación simbiotica.", 
+                           "D) Un ciclo de nutrientes."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es la fotosíntesis?",
+                opciones: ["A) El proceso por el cual los animales producen energía.", 
+                           "B) El proceso por el cual las plantas convierten luz en energía.", 
+                           "C) Un tipo de respiración celular.", "D) Una forma de descomposición."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el efecto del cambio climático en los ecosistemas?",
+                opciones: ["A) Aumento de la biodiversidad.", "B) Desaparición de hábitats y especies.", 
+                           "C) Estabilización de climas.", "D) Aumento de la producción de alimentos."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué son las especies invasoras?",
+                opciones: ["A) Especies nativas que están en peligro.", 
+                           "B) Especies que se introducen en un ecosistema y desplazan a las nativas.", 
+                           "C) Especies que están en peligro de extinción.", "D) Especies que ayudan a mejorar el ecosistema."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué papel juegan los polinizadores en un ecosistema?",
+                opciones: ["A) Aumentan la competencia entre especies.", "B) Descomponen materia orgánica.", 
+                           "C) Ayudan en la reproducción de plantas.", "D) Controlan las poblaciones de depredadores."],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué es la sucesión ecológica?",
+                opciones: ["A) El cambio en las especies que habitan un área a lo largo del tiempo.", 
+                           "B) Un proceso de deforestación.", "C) Una forma de contaminación.", 
+                           "D) Un tipo de adaptación."],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Cuál de los siguientes es un bioma caracterizado por su clima frío y vegetación escasa?",
+                opciones: ["A) Selva tropical", "B) Desierto", "C) Tundra", "D) Bosque templado"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué son los ciclos biogeoquímicos?",
+                opciones: ["A) Procesos de producción de energía.", "B) Ciclos de reciclaje de nutrientes en un ecosistema.", 
+                           "C) Cambios climáticos.", "D) Formas de reproducción."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el objetivo de la conservación de ecosistemas?",
+                opciones: ["A) Aumentar la población humana.", "B) Proteger la biodiversidad y los hábitats naturales.", 
+                           "C) Incrementar la explotación de recursos.", "D) Reducir la producción de alimentos."],
+                respuesta_correcta: "B"
+            },
+            // Preguntas Sociemocionales
+            {
+                pregunta: "¿Qué significa la inteligencia emocional?",
+                opciones: ["A) La habilidad para resolver problemas matemáticos.", 
+                           "B) La capacidad de reconocer y gestionar las emociones propias y ajenas.", 
+                           "C) La habilidad para memorizar información.", "D) La capacidad de realizar actividades físicas."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál de las siguientes es una emoción básica?",
+                opciones: ["A) Confusión", "B) Alegría", "C) Estrés", "D) Envidia"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es la empatía?",
+                opciones: ["A) La capacidad de sentir lástima por otros.", 
+                           "B) La habilidad para ponerse en el lugar de otra persona y comprender sus sentimientos.", 
+                           "C) La tendencia a ignorar las emociones ajenas.", "D) La capacidad de hacer amigos fácilmente."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el primer paso para manejar conflictos de manera efectiva?",
+                opciones: ["A) Gritar y expresar frustración.", "B) Escuchar a la otra parte.", 
+                           "C) Ignorar el conflicto.", "D) Tomar una decisión rápida."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué significa la autoeficacia?",
+                opciones: ["A) Creer que no puedes lograr nada.", 
+                           "B) La creencia en la capacidad propia para realizar tareas y alcanzar metas.", 
+                           "C) Depender de otros para lograr tus objetivos.", "D) La habilidad de criticar a otros."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el objetivo principal de las tutorías?",
+                opciones: ["A) Evaluar a los estudiantes.", "B) Proporcionar apoyo académico y personal.", 
+                           "C) Organizar actividades extracurriculares.", "D) Enseñar materias específicas."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué tipo de tutoría se enfoca en ayudar a los estudiantes a mejorar sus habilidades académicas?",
+                opciones: ["A) Tutoría social", "B) Tutoría emocional", "C) Tutoría académica", "D) Tutoría profesional"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Cuál es una de las habilidades más importantes que debe tener un tutor?",
+                opciones: ["A) Ser autoritario", "B) Escuchar activamente", "C) Hablar mucho", "D) Ser indiferente"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es una tutoría grupal?",
+                opciones: ["A) Una sesión individual con un tutor.", "B) Una sesión en la que un tutor trabaja con varios estudiantes.", 
+                           "C) Una clase regular.", "D) Un examen grupal."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es un indicador de que un estudiante puede necesitar tutoría?",
+                opciones: ["A) Siempre llega a tiempo.", "B) Participa activamente en clase.", 
+                           "C) Baja calificación en un examen.", "D) No tiene amigos."],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Cuál es el papel del tutor en la tutoría emocional?",
+                opciones: ["A) Ayudar a los estudiantes a resolver problemas académicos.", 
+                           "B) Brindar apoyo y orientación emocional.", "C) Supervisar exámenes.", "D) Dar clases magistrales."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué se debe hacer antes de una sesión de tutoría?",
+                opciones: ["A) Ignorar las necesidades del estudiante.", "B) Preparar un plan de estudio.", 
+                           "C) Asegurarse de que el estudiante no tenga preguntas.", "D) Hacer un examen sorpresa."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué estrategia es útil para fomentar la participación activa de los estudiantes en las tutorías?",
+                opciones: ["A) Hacer preguntas cerradas.", "B) Fomentar un ambiente de confianza.", 
+                           "C) Dar instrucciones estrictas.", "D) Evitar la interacción."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué debe incluir un plan de tutoría efectivo?",
+                opciones: ["A) Solo contenido académico.", "B) Objetivos claros y actividades variadas.", 
+                           "C) Estrategias de evaluación estrictas.", "D) Un cronograma riguroso sin flexibilidad."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cómo se puede medir el éxito de una tutoría?",
+                opciones: ["A) A través de las calificaciones finales.", "B) Mediante la satisfacción del estudiante y su progreso.", 
+                           "C) Comparando con otros estudiantes.", "D) Solo por la asistencia."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué tipo de preguntas son más efectivas en una tutoría?",
+                opciones: ["A) Preguntas de sí o no.", "B) Preguntas abiertas que fomentan la reflexión.", 
+                           "C) Preguntas triviales.", "D) Preguntas que solo requieren memoria."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es un recurso útil para los tutores?",
+                opciones: ["A) Ignorar las herramientas digitales.", "B) Utilizar materiales de apoyo y recursos en línea.", 
+                           "C) Solo usar libros de texto.", "D) No utilizar recursos externos."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué significa 'adaptar la tutoría' a las necesidades del estudiante?",
+                opciones: ["A) Mantener el mismo enfoque para todos.", "B) Personalizar el enfoque y las actividades según el estudiante.", 
+                           "C) Cambiar el horario frecuentemente.", "D) No hacer cambios en el plan original."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es la 'tutoría entre pares'?",
+                opciones: ["A) Un profesor que tutoriza a un estudiante.", "B) Un estudiante que ayuda a otro estudiante.", 
+                           "C) Un grupo de estudiantes sin tutor.", "D) Una clase de refuerzo."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es la importancia de la comunicación en la tutoría?",
+                opciones: ["A) Es irrelevante.", "B) Facilita la comprensión y el vínculo entre tutor y estudiante.", 
+                           "C) Solo debe ser formal.", "D) No es necesaria si hay buenos materiales."],
+                respuesta_correcta: "B"
+            },
+            // Preguntas de Ecosistemas
+            {
+                pregunta: "¿Qué es un ecosistema?",
+                opciones: ["A) Un conjunto de organismos en un solo lugar.", "B) La interacción entre organismos y su ambiente físico.", 
+                           "C) Un tipo de organismo.", "D) Un fenómeno natural."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el principal productor en un ecosistema terrestre?",
+                opciones: ["A) Animales herbívoros", "B) Animales carnívoros", "C) Plantas", "D) Descomponedores"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué función tienen los descomponedores en un ecosistema?",
+                opciones: ["A) Producir energía.", "B) Comer otros organismos.", "C) Descomponer materia orgánica y reciclar nutrientes.", "D) Ayudar en la fotosíntesis."],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué es un bioma?",
+                opciones: ["A) Un ecosistema pequeño.", "B) Una región ecológica caracterizada por su clima y flora.", 
+                           "C) Un tipo de animal.", "D) Un fenómeno meteorológico."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál de las siguientes es una característica de un ecosistema acuático?",
+                opciones: ["A) Alta concentración de dióxido de carbono.", "B) Presencia de agua.", 
+                           "C) Suelo seco.", "D) Clima árido."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es la biodiversidad?",
+                opciones: ["A) La cantidad de un solo tipo de organismo.", "B) La variedad de especies en un ecosistema.", 
+                           "C) La calidad del aire.", "D) La cantidad de agua en un ecosistema."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué tipo de relación se establece entre un depredador y su presa?",
+                opciones: ["A) Simbiosis", "B) Mutualismo", "C) Depredación", "D) Competencia"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Cuál de los siguientes es un ejemplo de un ecosistema?",
+                opciones: ["A) Un desierto", "B) Un lago", "C) Un bosque", "D) Todas las anteriores"],
+                respuesta_correcta: "D"
+            },
+            {
+                pregunta: "¿Qué es un nicho ecológico?",
+                opciones: ["A) El lugar donde vive un organismo.", "B) La función que desempeña un organismo en su ecosistema.", 
+                           "C) Una especie en peligro de extinción.", "D) Un tipo de bioma."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué tipo de organismos son los herbívoros?",
+                opciones: ["A) Organismos que solo consumen plantas.", "B) Organismos que solo consumen carne.", 
+                           "C) Organismos que descomponen materia orgánica.", "D) Organismos que producen su propia energía."],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Cuál es el impacto de la deforestación en un ecosistema?",
+                opciones: ["A) Aumento de la biodiversidad.", "B) Reducción de hábitats y especies.", 
+                           "C) Mejora de la calidad del aire.", "D) Aumento de la producción de oxígeno."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es la cadena alimentaria?",
+                opciones: ["A) Una secuencia de eventos que muestran cómo se descomponen los organismos.", 
+                           "B) Una serie de organismos que se alimentan unos de otros.", "C) Un tipo de relación simbiotica.", 
+                           "D) Un ciclo de nutrientes."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es la fotosíntesis?",
+                opciones: ["A) El proceso por el cual los animales producen energía.", 
+                           "B) El proceso por el cual las plantas convierten luz en energía.", 
+                           "C) Un tipo de respiración celular.", "D) Una forma de descomposición."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el efecto del cambio climático en los ecosistemas?",
+                opciones: ["A) Aumento de la biodiversidad.", "B) Desaparición de hábitats y especies.", 
+                           "C) Estabilización de climas.", "D) Aumento de la producción de alimentos."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué son las especies invasoras?",
+                opciones: ["A) Especies nativas que están en peligro.", 
+                           "B) Especies que se introducen en un ecosistema y desplazan a las nativas.", 
+                           "C) Especies que están en peligro de extinción.", "D) Especies que ayudan a mejorar el ecosistema."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué papel juegan los polinizadores en un ecosistema?",
+                opciones: ["A) Aumentan la competencia entre especies.", "B) Descomponen materia orgánica.", 
+                           "C) Ayudan en la reproducción de plantas.", "D) Controlan las poblaciones de depredadores."],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué es la sucesión ecológica?",
+                opciones: ["A) El cambio en las especies que habitan un área a lo largo del tiempo.", 
+                           "B) Un proceso de deforestación.", "C) Una forma de contaminación.", 
+                           "D) Un tipo de adaptación."],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Cuál de los siguientes es un bioma caracterizado por su clima frío y vegetación escasa?",
+                opciones: ["A) Selva tropical", "B) Desierto", "C) Tundra", "D) Bosque templado"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué son los ciclos biogeoquímicos?",
+                opciones: ["A) Procesos de producción de energía.", "B) Ciclos de reciclaje de nutrientes en un ecosistema.", 
+                           "C) Cambios climáticos.", "D) Formas de reproducción."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el objetivo de la conservación de ecosistemas?",
+                opciones: ["A) Aumentar la población humana.", "B) Proteger la biodiversidad y los hábitats naturales.", 
+                           "C) Incrementar la explotación de recursos.", "D) Reducir la producción de alimentos."],
+                respuesta_correcta: "B"
+            },
+            // Preguntas Sociemocionales
+            {
+                pregunta: "¿Qué significa la inteligencia emocional?",
+                opciones: ["A) La habilidad para resolver problemas matemáticos.", 
+                           "B) La capacidad de reconocer y gestionar las emociones propias y ajenas.", 
+                           "C) La habilidad para memorizar información.", "D) La capacidad de realizar actividades físicas."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál de las siguientes es una emoción básica?",
+                opciones: ["A) Confusión", "B) Alegría", "C) Estrés", "D) Envidia"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es la empatía?",
+                opciones: ["A) La capacidad de sentir lástima por otros.", 
+                           "B) La habilidad para ponerse en el lugar de otra persona y comprender sus sentimientos.", 
+                           "C) La tendencia a ignorar las emociones ajenas.", "D) La capacidad de hacer amigos fácilmente."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el primer paso para manejar conflictos de manera efectiva?",
+                opciones: ["A) Gritar y expresar frustración.", "B) Escuchar a la otra parte.", 
+                           "C) Ignorar el conflicto.", "D) Tomar una decisión rápida."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué significa la autoeficacia?",
+                opciones: ["A) Creer que no puedes lograr nada.", 
+                           "B) La creencia en la capacidad propia para realizar tareas y alcanzar metas.", 
+                           "C) Depender de otros para lograr tus objetivos.", "D) La habilidad de criticar a otros."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el objetivo principal de las tutorías?",
+                opciones: ["A) Evaluar a los estudiantes.", "B) Proporcionar apoyo académico y personal.", 
+                           "C) Organizar actividades extracurriculares.", "D) Enseñar materias específicas."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué tipo de tutoría se enfoca en ayudar a los estudiantes a mejorar sus habilidades académicas?",
+                opciones: ["A) Tutoría social", "B) Tutoría emocional", "C) Tutoría académica", "D) Tutoría profesional"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Cuál es una de las habilidades más importantes que debe tener un tutor?",
+                opciones: ["A) Ser autoritario", "B) Escuchar activamente", "C) Hablar mucho", "D) Ser indiferente"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es una tutoría grupal?",
+                opciones: ["A) Una sesión individual con un tutor.", "B) Una sesión en la que un tutor trabaja con varios estudiantes.", 
+                           "C) Una clase regular.", "D) Un examen grupal."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es un indicador de que un estudiante puede necesitar tutoría?",
+                opciones: ["A) Siempre llega a tiempo.", "B) Participa activamente en clase.", 
+                           "C) Baja calificación en un examen.", "D) No tiene amigos."],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Cuál es el papel del tutor en la tutoría emocional?",
+                opciones: ["A) Ayudar a los estudiantes a resolver problemas académicos.", 
+                           "B) Brindar apoyo y orientación emocional.", "C) Supervisar exámenes.", "D) Dar clases magistrales."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué se debe hacer antes de una sesión de tutoría?",
+                opciones: ["A) Ignorar las necesidades del estudiante.", "B) Preparar un plan de estudio.", 
+                           "C) Asegurarse de que el estudiante no tenga preguntas.", "D) Hacer un examen sorpresa."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué estrategia es útil para fomentar la participación activa de los estudiantes en las tutorías?",
+                opciones: ["A) Hacer preguntas cerradas.", "B) Fomentar un ambiente de confianza.", 
+                           "C) Dar instrucciones estrictas.", "D) Evitar la interacción."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué debe incluir un plan de tutoría efectivo?",
+                opciones: ["A) Solo contenido académico.", "B) Objetivos claros y actividades variadas.", 
+                           "C) Estrategias de evaluación estrictas.", "D) Un cronograma riguroso sin flexibilidad."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cómo se puede medir el éxito de una tutoría?",
+                opciones: ["A) A través de las calificaciones finales.", "B) Mediante la satisfacción del estudiante y su progreso.", 
+                           "C) Comparando con otros estudiantes.", "D) Solo por la asistencia."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué tipo de preguntas son más efectivas en una tutoría?",
+                opciones: ["A) Preguntas de sí o no.", "B) Preguntas abiertas que fomentan la reflexión.", 
+                           "C) Preguntas triviales.", "D) Preguntas que solo requieren memoria."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es un recurso útil para los tutores?",
+                opciones: ["A) Ignorar las herramientas digitales.", "B) Utilizar materiales de apoyo y recursos en línea.", 
+                           "C) Solo usar libros de texto.", "D) No utilizar recursos externos."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué significa 'adaptar la tutoría' a las necesidades del estudiante?",
+                opciones: ["A) Mantener el mismo enfoque para todos.", "B) Personalizar el enfoque y las actividades según el estudiante.", 
+                           "C) Cambiar el horario frecuentemente.", "D) No hacer cambios en el plan original."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es la 'tutoría entre pares'?",
+                opciones: ["A) Un profesor que tutoriza a un estudiante.", "B) Un estudiante que ayuda a otro estudiante.", 
+                           "C) Un grupo de estudiantes sin tutor.", "D) Una clase de refuerzo."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es la importancia de la comunicación en la tutoría?",
+                opciones: ["A) Es irrelevante.", "B) Facilita la comprensión y el vínculo entre tutor y estudiante.", 
+                           "C) Solo debe ser formal.", "D) No es necesaria si hay buenos materiales."],
+                respuesta_correcta: "B"
+            },
+            // Preguntas de Ecosistemas
+            {
+                pregunta: "¿Qué es un ecosistema?",
+                opciones: ["A) Un conjunto de organismos en un solo lugar.", "B) La interacción entre organismos y su ambiente físico.", 
+                           "C) Un tipo de organismo.", "D) Un fenómeno natural."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el principal productor en un ecosistema terrestre?",
+                opciones: ["A) Animales herbívoros", "B) Animales carnívoros", "C) Plantas", "D) Descomponedores"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué función tienen los descomponedores en un ecosistema?",
+                opciones: ["A) Producir energía.", "B) Comer otros organismos.", "C) Descomponer materia orgánica y reciclar nutrientes.", "D) Ayudar en la fotosíntesis."],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué es un bioma?",
+                opciones: ["A) Un ecosistema pequeño.", "B) Una región ecológica caracterizada por su clima y flora.", 
+                           "C) Un tipo de animal.", "D) Un fenómeno meteorológico."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál de las siguientes es una característica de un ecosistema acuático?",
+                opciones: ["A) Alta concentración de dióxido de carbono.", "B) Presencia de agua.", 
+                           "C) Suelo seco.", "D) Clima árido."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es la biodiversidad?",
+                opciones: ["A) La cantidad de un solo tipo de organismo.", "B) La variedad de especies en un ecosistema.", 
+                           "C) La calidad del aire.", "D) La cantidad de agua en un ecosistema."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué tipo de relación se establece entre un depredador y su presa?",
+                opciones: ["A) Simbiosis", "B) Mutualismo", "C) Depredación", "D) Competencia"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Cuál de los siguientes es un ejemplo de un ecosistema?",
+                opciones: ["A) Un desierto", "B) Un lago", "C) Un bosque", "D) Todas las anteriores"],
+                respuesta_correcta: "D"
+            },
+            {
+                pregunta: "¿Qué es un nicho ecológico?",
+                opciones: ["A) El lugar donde vive un organismo.", "B) La función que desempeña un organismo en su ecosistema.", 
+                           "C) Una especie en peligro de extinción.", "D) Un tipo de bioma."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué tipo de organismos son los herbívoros?",
+                opciones: ["A) Organismos que solo consumen plantas.", "B) Organismos que solo consumen carne.", 
+                           "C) Organismos que descomponen materia orgánica.", "D) Organismos que producen su propia energía."],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Cuál es el impacto de la deforestación en un ecosistema?",
+                opciones: ["A) Aumento de la biodiversidad.", "B) Reducción de hábitats y especies.", 
+                           "C) Mejora de la calidad del aire.", "D) Aumento de la producción de oxígeno."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es la cadena alimentaria?",
+                opciones: ["A) Una secuencia de eventos que muestran cómo se descomponen los organismos.", 
+                           "B) Una serie de organismos que se alimentan unos de otros.", "C) Un tipo de relación simbiotica.", 
+                           "D) Un ciclo de nutrientes."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es la fotosíntesis?",
+                opciones: ["A) El proceso por el cual los animales producen energía.", 
+                           "B) El proceso por el cual las plantas convierten luz en energía.", 
+                           "C) Un tipo de respiración celular.", "D) Una forma de descomposición."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el efecto del cambio climático en los ecosistemas?",
+                opciones: ["A) Aumento de la biodiversidad.", "B) Desaparición de hábitats y especies.", 
+                           "C) Estabilización de climas.", "D) Aumento de la producción de alimentos."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué son las especies invasoras?",
+                opciones: ["A) Especies nativas que están en peligro.", 
+                           "B) Especies que se introducen en un ecosistema y desplazan a las nativas.", 
+                           "C) Especies que están en peligro de extinción.", "D) Especies que ayudan a mejorar el ecosistema."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué papel juegan los polinizadores en un ecosistema?",
+                opciones: ["A) Aumentan la competencia entre especies.", "B) Descomponen materia orgánica.", 
+                           "C) Ayudan en la reproducción de plantas.", "D) Controlan las poblaciones de depredadores."],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué es la sucesión ecológica?",
+                opciones: ["A) El cambio en las especies que habitan un área a lo largo del tiempo.", 
+                           "B) Un proceso de deforestación.", "C) Una forma de contaminación.", 
+                           "D) Un tipo de adaptación."],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Cuál de los siguientes es un bioma caracterizado por su clima frío y vegetación escasa?",
+                opciones: ["A) Selva tropical", "B) Desierto", "C) Tundra", "D) Bosque templado"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué son los ciclos biogeoquímicos?",
+                opciones: ["A) Procesos de producción de energía.", "B) Ciclos de reciclaje de nutrientes en un ecosistema.", 
+                           "C) Cambios climáticos.", "D) Formas de reproducción."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el objetivo de la conservación de ecosistemas?",
+                opciones: ["A) Aumentar la población humana.", "B) Proteger la biodiversidad y los hábitats naturales.", 
+                           "C) Incrementar la explotación de recursos.", "D) Reducir la producción de alimentos."],
+                respuesta_correcta: "B"
+            },
+            // Preguntas Sociemocionales
+            {
+                pregunta: "¿Qué significa la inteligencia emocional?",
+                opciones: ["A) La habilidad para resolver problemas matemáticos.", 
+                           "B) La capacidad de reconocer y gestionar las emociones propias y ajenas.", 
+                           "C) La habilidad para memorizar información.", "D) La capacidad de realizar actividades físicas."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál de las siguientes es una emoción básica?",
+                opciones: ["A) Confusión", "B) Alegría", "C) Estrés", "D) Envidia"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es la empatía?",
+                opciones: ["A) La capacidad de sentir lástima por otros.", 
+                           "B) La habilidad para ponerse en el lugar de otra persona y comprender sus sentimientos.", 
+                           "C) La tendencia a ignorar las emociones ajenas.", "D) La capacidad de hacer amigos fácilmente."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el primer paso para manejar conflictos de manera efectiva?",
+                opciones: ["A) Gritar y expresar frustración.", "B) Escuchar a la otra parte.", 
+                           "C) Ignorar el conflicto.", "D) Tomar una decisión rápida."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué significa la autoeficacia?",
+                opciones: ["A) Creer que no puedes lograr nada.", 
+                           "B) La creencia en la capacidad propia para realizar tareas y alcanzar metas.", 
+                           "C) Depender de otros para lograr tus objetivos.", "D) La habilidad de criticar a otros."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el objetivo principal de las tutorías?",
+                opciones: ["A) Evaluar a los estudiantes.", "B) Proporcionar apoyo académico y personal.", 
+                           "C) Organizar actividades extracurriculares.", "D) Enseñar materias específicas."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué tipo de tutoría se enfoca en ayudar a los estudiantes a mejorar sus habilidades académicas?",
+                opciones: ["A) Tutoría social", "B) Tutoría emocional", "C) Tutoría académica", "D) Tutoría profesional"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Cuál es una de las habilidades más importantes que debe tener un tutor?",
+                opciones: ["A) Ser autoritario", "B) Escuchar activamente", "C) Hablar mucho", "D) Ser indiferente"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es una tutoría grupal?",
+                opciones: ["A) Una sesión individual con un tutor.", "B) Una sesión en la que un tutor trabaja con varios estudiantes.", 
+                           "C) Una clase regular.", "D) Un examen grupal."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es un indicador de que un estudiante puede necesitar tutoría?",
+                opciones: ["A) Siempre llega a tiempo.", "B) Participa activamente en clase.", 
+                           "C) Baja calificación en un examen.", "D) No tiene amigos."],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Cuál es el papel del tutor en la tutoría emocional?",
+                opciones: ["A) Ayudar a los estudiantes a resolver problemas académicos.", 
+                           "B) Brindar apoyo y orientación emocional.", "C) Supervisar exámenes.", "D) Dar clases magistrales."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué se debe hacer antes de una sesión de tutoría?",
+                opciones: ["A) Ignorar las necesidades del estudiante.", "B) Preparar un plan de estudio.", 
+                           "C) Asegurarse de que el estudiante no tenga preguntas.", "D) Hacer un examen sorpresa."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué estrategia es útil para fomentar la participación activa de los estudiantes en las tutorías?",
+                opciones: ["A) Hacer preguntas cerradas.", "B) Fomentar un ambiente de confianza.", 
+                           "C) Dar instrucciones estrictas.", "D) Evitar la interacción."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué debe incluir un plan de tutoría efectivo?",
+                opciones: ["A) Solo contenido académico.", "B) Objetivos claros y actividades variadas.", 
+                           "C) Estrategias de evaluación estrictas.", "D) Un cronograma riguroso sin flexibilidad."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cómo se puede medir el éxito de una tutoría?",
+                opciones: ["A) A través de las calificaciones finales.", "B) Mediante la satisfacción del estudiante y su progreso.", 
+                           "C) Comparando con otros estudiantes.", "D) Solo por la asistencia."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué tipo de preguntas son más efectivas en una tutoría?",
+                opciones: ["A) Preguntas de sí o no.", "B) Preguntas abiertas que fomentan la reflexión.", 
+                           "C) Preguntas triviales.", "D) Preguntas que solo requieren memoria."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es un recurso útil para los tutores?",
+                opciones: ["A) Ignorar las herramientas digitales.", "B) Utilizar materiales de apoyo y recursos en línea.", 
+                           "C) Solo usar libros de texto.", "D) No utilizar recursos externos."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué significa 'adaptar la tutoría' a las necesidades del estudiante?",
+                opciones: ["A) Mantener el mismo enfoque para todos.", "B) Personalizar el enfoque y las actividades según el estudiante.", 
+                           "C) Cambiar el horario frecuentemente.", "D) No hacer cambios en el plan original."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es la 'tutoría entre pares'?",
+                opciones: ["A) Un profesor que tutoriza a un estudiante.", "B) Un estudiante que ayuda a otro estudiante.", 
+                           "C) Un grupo de estudiantes sin tutor.", "D) Una clase de refuerzo."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es la importancia de la comunicación en la tutoría?",
+                opciones: ["A) Es irrelevante.", "B) Facilita la comprensión y el vínculo entre tutor y estudiante.", 
+                           "C) Solo debe ser formal.", "D) No es necesaria si hay buenos materiales."],
+                respuesta_correcta: "B"
+            },
+            // Preguntas de Ecosistemas
+            {
+                pregunta: "¿Qué es un ecosistema?",
+                opciones: ["A) Un conjunto de organismos en un solo lugar.", "B) La interacción entre organismos y su ambiente físico.", 
+                           "C) Un tipo de organismo.", "D) Un fenómeno natural."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el principal productor en un ecosistema terrestre?",
+                opciones: ["A) Animales herbívoros", "B) Animales carnívoros", "C) Plantas", "D) Descomponedores"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué función tienen los descomponedores en un ecosistema?",
+                opciones: ["A) Producir energía.", "B) Comer otros organismos.", "C) Descomponer materia orgánica y reciclar nutrientes.", "D) Ayudar en la fotosíntesis."],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué es un bioma?",
+                opciones: ["A) Un ecosistema pequeño.", "B) Una región ecológica caracterizada por su clima y flora.", 
+                           "C) Un tipo de animal.", "D) Un fenómeno meteorológico."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál de las siguientes es una característica de un ecosistema acuático?",
+                opciones: ["A) Alta concentración de dióxido de carbono.", "B) Presencia de agua.", 
+                           "C) Suelo seco.", "D) Clima árido."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es la biodiversidad?",
+                opciones: ["A) La cantidad de un solo tipo de organismo.", "B) La variedad de especies en un ecosistema.", 
+                           "C) La calidad del aire.", "D) La cantidad de agua en un ecosistema."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué tipo de relación se establece entre un depredador y su presa?",
+                opciones: ["A) Simbiosis", "B) Mutualismo", "C) Depredación", "D) Competencia"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Cuál de los siguientes es un ejemplo de un ecosistema?",
+                opciones: ["A) Un desierto", "B) Un lago", "C) Un bosque", "D) Todas las anteriores"],
+                respuesta_correcta: "D"
+            },
+            {
+                pregunta: "¿Qué es un nicho ecológico?",
+                opciones: ["A) El lugar donde vive un organismo.", "B) La función que desempeña un organismo en su ecosistema.", 
+                           "C) Una especie en peligro de extinción.", "D) Un tipo de bioma."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué tipo de organismos son los herbívoros?",
+                opciones: ["A) Organismos que solo consumen plantas.", "B) Organismos que solo consumen carne.", 
+                           "C) Organismos que descomponen materia orgánica.", "D) Organismos que producen su propia energía."],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Cuál es el impacto de la deforestación en un ecosistema?",
+                opciones: ["A) Aumento de la biodiversidad.", "B) Reducción de hábitats y especies.", 
+                           "C) Mejora de la calidad del aire.", "D) Aumento de la producción de oxígeno."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es la cadena alimentaria?",
+                opciones: ["A) Una secuencia de eventos que muestran cómo se descomponen los organismos.", 
+                           "B) Una serie de organismos que se alimentan unos de otros.", "C) Un tipo de relación simbiotica.", 
+                           "D) Un ciclo de nutrientes."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es la fotosíntesis?",
+                opciones: ["A) El proceso por el cual los animales producen energía.", 
+                           "B) El proceso por el cual las plantas convierten luz en energía.", 
+                           "C) Un tipo de respiración celular.", "D) Una forma de descomposición."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el efecto del cambio climático en los ecosistemas?",
+                opciones: ["A) Aumento de la biodiversidad.", "B) Desaparición de hábitats y especies.", 
+                           "C) Estabilización de climas.", "D) Aumento de la producción de alimentos."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué son las especies invasoras?",
+                opciones: ["A) Especies nativas que están en peligro.", 
+                           "B) Especies que se introducen en un ecosistema y desplazan a las nativas.", 
+                           "C) Especies que están en peligro de extinción.", "D) Especies que ayudan a mejorar el ecosistema."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué papel juegan los polinizadores en un ecosistema?",
+                opciones: ["A) Aumentan la competencia entre especies.", "B) Descomponen materia orgánica.", 
+                           "C) Ayudan en la reproducción de plantas.", "D) Controlan las poblaciones de depredadores."],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué es la sucesión ecológica?",
+                opciones: ["A) El cambio en las especies que habitan un área a lo largo del tiempo.", 
+                           "B) Un proceso de deforestación.", "C) Una forma de contaminación.", 
+                           "D) Un tipo de adaptación."],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Cuál de los siguientes es un bioma caracterizado por su clima frío y vegetación escasa?",
+                opciones: ["A) Selva tropical", "B) Desierto", "C) Tundra", "D) Bosque templado"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué son los ciclos biogeoquímicos?",
+                opciones: ["A) Procesos de producción de energía.", "B) Ciclos de reciclaje de nutrientes en un ecosistema.", 
+                           "C) Cambios climáticos.", "D) Formas de reproducción."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el objetivo de la conservación de ecosistemas?",
+                opciones: ["A) Aumentar la población humana.", "B) Proteger la biodiversidad y los hábitats naturales.", 
+                           "C) Incrementar la explotación de recursos.", "D) Reducir la producción de alimentos."],
+                respuesta_correcta: "B"
+            },
+            // Preguntas Sociemocionales
+            {
+                pregunta: "¿Qué significa la inteligencia emocional?",
+                opciones: ["A) La habilidad para resolver problemas matemáticos.", 
+                           "B) La capacidad de reconocer y gestionar las emociones propias y ajenas.", 
+                           "C) La habilidad para memorizar información.", "D) La capacidad de realizar actividades físicas."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál de las siguientes es una emoción básica?",
+                opciones: ["A) Confusión", "B) Alegría", "C) Estrés", "D) Envidia"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es la empatía?",
+                opciones: ["A) La capacidad de sentir lástima por otros.", 
+                           "B) La habilidad para ponerse en el lugar de otra persona y comprender sus sentimientos.", 
+                           "C) La tendencia a ignorar las emociones ajenas.", "D) La capacidad de hacer amigos fácilmente."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el primer paso para manejar conflictos de manera efectiva?",
+                opciones: ["A) Gritar y expresar frustración.", "B) Escuchar a la otra parte.", 
+                           "C) Ignorar el conflicto.", "D) Tomar una decisión rápida."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué significa la autoeficacia?",
+                opciones: ["A) Creer que no puedes lograr nada.", 
+                           "B) La creencia en la capacidad propia para realizar tareas y alcanzar metas.", 
+                           "C) Depender de otros para lograr tus objetivos.", "D) La habilidad de criticar a otros."],
+                respuesta_correcta: "B"
+            }
+        ];
+
+        function obtenerPreguntasAleatorias() {
+            const preguntasAleatorias = [];
+            const indicesSeleccionados = new Set();
+
+            while (preguntasAleatorias.length < 70) {
+                const indiceAleatorio = Math.floor(Math.random() * preguntas.length);
+                if (!indicesSeleccionados.has(indiceAleatorio)) {
+                    indicesSeleccionados.add(indiceAleatorio);
+                    preguntasAleatorias.push(preguntas[indiceAleatorio]);
+                }
+            }
+            return preguntasAleatorias;
+        }
+
+        function generarPreguntas() {
+            const examenForm = document.getElementById('examenForm');
+            const preguntasAleatorias = obtenerPreguntasAleatorias();
+            preguntasAleatorias.forEach((pregunta, index) => {
+                const divPregunta = document.createElement('div');
+                divPregunta.className = 'pregunta';
+                divPregunta.innerHTML = `<p>${index + 1}. ${pregunta.pregunta}</p>`;
+                pregunta.opciones.forEach(opcion => {
+                    divPregunta.innerHTML += `
+                        <label>
+                            <input type="radio" name="pregunta${index}" value="${opcion.charAt(0)}"> ${opcion}
+                        </label><br>
+                    `;
+                });
+                examenForm.appendChild(divPregunta);
+            });
+        }
+
+        function verificarRespuestas() {
+            let puntaje = 0;
+            const preguntasAleatorias = obtenerPreguntasAleatorias();
+            preguntasAleatorias.forEach((pregunta, index) => {
+                const respuestaSeleccionada = document.querySelector(`input[name="pregunta${index}"]:checked`);
+                if (respuestaSeleccionada && respuestaSeleccionada.value === pregunta.respuesta_correcta) {
+                    puntaje++;
+                }
+            });
+            document.getElementById('resultado').innerText = `Tu puntaje es: ${puntaje} de 70`;
+        }
+
+        window.onload = generarPreguntas;
+    </script>
+</body>
+</html>

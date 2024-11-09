@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Exámenes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .pregunta {
+            margin-bottom: 15px;
+        }
+        .resultado {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Examen Combinado</h1>
+    <form id="examenForm">
+        <!-- Preguntas se insertarán aquí -->
+    </form>
+    <button onclick="verificarRespuestas()">Verificar Respuestas</button>
+    <div class="resultado" id="resultado"></div>
+
+    <script>
+        const preguntashumanidades = [
+            // Preguntas de Humanidades
+            {
+                pregunta: "¿Qué es la filosofía?",
+                opciones: ["A) Estudio de los animales.", "B) Reflexión sobre preguntas fundamentales.", 
+                           "C) Análisis de datos estadísticos.", "D) Práctica artística."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué abarca la antropología?",
+                opciones: ["A) Solo la prehistoria.", "B) Culturas, sociedades y evolución humana.", 
+                           "C) La física del comportamiento humano.", "D) La historia de la literatura."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es la diferencia entre historia e historiografía?",
+                opciones: ["A) No hay diferencia.", "B) Historia es el estudio del pasado, y historiografía es su interpretación.", 
+                           "C) Historia solo estudia guerras.", "D) Historiografía se refiere a documentos antiguos."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué papel juega la literatura en el entendimiento de la condición humana?",
+                opciones: ["A) Solo es entretenimiento.", "B) Ofrece perspectivas sobre la vida y la sociedad.", 
+                           "C) No tiene relevancia.", "D) Es solo un reflejo de hechos históricos."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cómo influyen las culturas en la formación de identidades?",
+                opciones: ["A) De ninguna manera.", "B) A través de tradiciones, valores y creencias.", 
+                           "C) Solo por medio de la religión.", "D) Únicamente a través del lenguaje."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué son las ciencias sociales?",
+                opciones: ["A) Estudio de los fenómenos naturales.", "B) Disciplinas que estudian el comportamiento humano y las sociedades.", 
+                           "C) Una forma de literatura.", "D) Exclusivamente investigación histórica."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es la función del arte en la sociedad?",
+                opciones: ["A) Solo decoración.", "B) Expresión de ideas, emociones y críticas sociales.", 
+                           "C) Simplemente entretenimiento.", "D) Ninguna, es irrelevante."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué impacto tiene la religión en las culturas contemporáneas?",
+                opciones: ["A) Ninguno, es obsoleta.", "B) Puede influir en valores, tradiciones y conflictos.", 
+                           "C) Solo afecta a comunidades cerradas.", "D) Es solo un fenómeno del pasado."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cómo se estudia el lenguaje desde una perspectiva humanística?",
+                opciones: ["A) Solo como un sistema de comunicación.", "B) Como un medio que refleja cultura y pensamiento.", 
+                           "C) Exclusivamente por su gramática.", "D) Solo a través de la literatura."],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuáles son los principales enfoques en la crítica literaria?",
+                opciones: ["A) Estudio del autor únicamente.", "B) Análisis de texto, contexto y recepción.", 
+                           "C) Ignorar el contexto histórico.", "D) Solo análisis temático."],
+                respuesta_correcta: "B"
+            },
+            // Preguntas de Inglés
+            {
+                pregunta: "¿Cuál es el tiempo verbal de la frase: 'She is eating'?",
+                opciones: ["A) Pasado simple", "B) Presente continuo", "C) Futuro simple", "D) Pasado continuo"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué significa 'to run out of something'?",
+                opciones: ["A) Encontrar algo", "B) Gastar completamente algo", "C) Huir de un lugar", "D) Correr hacia algo"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es el adjetivo comparativo de 'good'?",
+                opciones: ["A) Gooder", "B) Best", "C) Better", "D) Goodest"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué es un 'synonym'?",
+                opciones: ["A) Una palabra opuesta", "B) Una palabra con el mismo significado", "C) Una palabra en otro idioma", "D) Una palabra inventada"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cómo se forma una pregunta en pasado simple?",
+                opciones: ["A) ¿Did she go?", "B) ¿Goes she?", "C) ¿Is she going?", "D) ¿Did she gone?"],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Qué significa 'to take something for granted'?",
+                opciones: ["A) Apreciar algo", "B) No valorar algo adecuadamente", "C) Tomar algo prestado", "D) Asumir algo sin preguntar"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es la forma correcta del verbo en la siguiente frase: 'He usually ____ to the gym.'?",
+                opciones: ["A) Go", "B) Goes", "C) Going", "D) Gone"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es la función de una preposición?",
+                opciones: ["A) Indicar tiempo, lugar o dirección", "B) Sustituir un sustantivo", "C) Conjugar un verbo", "D) Crear oraciones interrogativas"],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Cuál es el pasado de 'go'?",
+                opciones: ["A) Goed", "B) Gone", "C) Went", "D) Going"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué es un 'idiom'?",
+                opciones: ["A) Un tipo de poesía", "B) Una expresión cuya significado no es literal", "C) Un nombre propio", "D) Un sustantivo común"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Cuál es la forma correcta en futuro simple de: 'They ____ (to travel) to Paris'?",
+                opciones: ["A) Will travel", "B) Travels", "C) Travelled", "D) Are traveling"],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Qué tipo de palabra es 'quickly'?",
+                opciones: ["A) Sustantivo", "B) Adjetivo", "C) Verbo", "D) Adverbio"],
+                respuesta_correcta: "D"
+            },
+            {
+                pregunta: "¿Cómo se dice 'gracias' en inglés?",
+                opciones: ["A) Please", "B) Thank you", "C) Sorry", "D) Excuse me"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué significa 'to be on the same page'?",
+                opciones: ["A) Estar de acuerdo", "B) Leer lo mismo", "C) Estar en conflicto", "D) Compartir libros"],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Cuál es la forma correcta de 'I have ___ (a) apple'?",
+                opciones: ["A) An", "B) The", "C) One", "D) Some"],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Cuál es la contracción de 'they are'?",
+                opciones: ["A) They’re", "B) Their", "C) Theys", "D) They is"],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Cuál es el plural de 'child'?",
+                opciones: ["A) Childs", "B) Children", "C) Childer", "D) Childes"],
+                respuesta_correcta: "B"
+            },
+            {
+                pregunta: "¿Qué es un 'conjunction'?",
+                opciones: ["A) Una palabra que une frases o palabras", "B) Un tipo de verbo", "C) Un sinónimo", "D) Un adjetivo"],
+                respuesta_correcta: "A"
+            },
+            {
+                pregunta: "¿Cuál es la forma correcta en pasado de 'eat'?",
+                opciones: ["A) Eated", "B) Eaten", "C) Ate", "D) Eating"],
+                respuesta_correcta: "C"
+            },
+            {
+                pregunta: "¿Qué es un 'compound sentence'?",
+                opciones: ["A) Una oración que contiene un solo sujeto", "B) Una oración con dos o más cláusulas independientes", "C) Una oración sin verbo", "D) Una oración muy corta"],
+                respuesta_correcta: "B"
+            },
+            // Preguntas de Matemáticas
+const preguntas = [
+    {
+        pregunta: "¿Cuál es el valor de 7 + 3?",
+        opciones: ["A) 9", "B) 10", "C) 11", "D) 12"],
+        respuesta_correcta: "B"
+    },
+    {
+        pregunta: "¿Cuál es el resultado de 15 − 6?",
+        opciones: ["A) 8", "B) 9", "C) 7", "D) 10"],
+        respuesta_correcta: "A"
+    },
+    {
+        pregunta: "¿Qué es un número primo?",
+        opciones: ["A) Un número que solo es divisible por 1 y por sí mismo.", "B) Un número que tiene más de dos divisores.", 
+                   "C) Un número par.", "D) Un número entero negativo."],
+        respuesta_correcta: "A"
+    },
+    {
+        pregunta: "¿Cuánto es 8 × 7?",
+        opciones: ["A) 54", "B) 56", "C) 58", "D) 60"],
+        respuesta_correcta: "B"
+    },
+    {
+        pregunta: "¿Cuál es la raíz cuadrada de 81?",
+        opciones: ["A) 7", "B) 8", "C) 9", "D) 10"],
+        respuesta_correcta: "C"
+    },
+    {
+        pregunta: "¿Cuál es el área de un triángulo con base de 10 y altura de 5?",
+        opciones: ["A) 25", "B) 30", "C) 50", "D) 75"],
+        respuesta_correcta: "A" // Área = 1/2 × base × altura
+    },
+    {
+        pregunta: "¿Qué representa el término 'media' en estadística?",
+        opciones: ["A) El valor más alto de un conjunto.", "B) El valor más bajo de un conjunto.", 
+                   "C) La suma de todos los valores dividida por el número de valores.", "D) La diferencia entre el valor más alto y el más bajo."],
+        respuesta_correcta: "C"
+    },
+    {
+        pregunta: "¿Cuál es el perímetro de un cuadrado con lados de 4 cm?",
+        opciones: ["A) 8 cm", "B) 12 cm", "C) 16 cm", "D) 20 cm"],
+        respuesta_correcta: "C" // Perímetro = 4 × lado
+    },
+    {
+        pregunta: "¿Qué es una fracción equivalente a 1/2?",
+        opciones: ["A) 2/3", "B) 3/6", "C) 4/5", "D) 5/8"],
+        respuesta_correcta: "B"
+    },
+    {
+        pregunta: "¿Cuál es el valor de 2^3?",
+        opciones: ["A) 6", "B) 8", "C) 9", "D) 10"],
+        respuesta_correcta: "B"
+    },
+    {
+        pregunta: "¿Qué es un ángulo recto?",
+        opciones: ["A) Un ángulo de 90 grados.", "B) Un ángulo de 180 grados.", 
+                   "C) Un ángulo de 45 grados.", "D) Un ángulo de 360 grados."],
+        respuesta_correcta: "A"
+    },
+    {
+        pregunta: "¿Cuál es el resultado de 12 ÷ 4?",
+        opciones: ["A) 2", "B) 3", "C) 4", "D) 6"],
+        respuesta_correcta: "B"
+    },
+    {
+        pregunta: "¿Cuánto es 5 + 3 × 2?",
+        opciones: ["A) 11", "B) 16", "C) 13", "D) 10"],
+        respuesta_correcta: "A" // Debido a la jerarquía de operaciones
+    },
+    {
+        pregunta: "¿Qué es un polígono?",
+        opciones: ["A) Una figura con cuatro lados.", "B) Una figura cerrada con tres o más lados.", 
+                   "C) Una figura con lados curvos.", "D) Una figura con solo un lado."],
+        respuesta_correcta: "B"
+    },
+    {
+        pregunta: "¿Cuál es el valor de 9 − (3 + 4)?",
+        opciones: ["A) 1", "B) 2", "C) 3", "D) 0"],
+        respuesta_correcta: "A"
+    },
+    {
+        pregunta: "¿Cuántos grados hay en un círculo completo?",
+        opciones: ["A) 180", "B) 270", "C) 360", "D) 400"],
+        respuesta_correcta: "C"
+    },
+    {
+        pregunta: "¿Qué es la mediana en un conjunto de datos?",
+        opciones: ["A) El valor más frecuente.", "B) El valor en el medio cuando están ordenados.", 
+                   "C) La suma de todos los valores.", "D) El valor más alto."],
+        respuesta_correcta: "B"
+    },
+    {
+        pregunta: "¿Cuál es el resultado de 4^2?",
+        opciones: ["A) 8", "B) 12", "C) 16", "D) 18"],
+        respuesta_correcta: "C"
+    },
+    {
+        pregunta: "¿Qué tipo de gráfico se usa para mostrar proporciones?",
+        opciones: ["A) Gráfico de barras", "B) Gráfico de líneas", "C) Gráfico circular", "D) Histograma"],
+        respuesta_correcta: "C"
+    },
+    {
+        pregunta: "¿Cuál es la fórmula del área de un círculo?",
+        opciones: ["A) π × r²", "B) 2πr", "C) 1/2 bh", "D) l × w"],
+        respuesta_correcta: "A"
+    }
+];
+        
+
+        function generarPreguntas() {
+            const examenForm = document.getElementById('examenForm');
+            preguntas.forEach((pregunta, index) => {
+                const divPregunta = document.createElement('div');
+                divPregunta.className = 'pregunta';
+                divPregunta.innerHTML = `<p>${index + 1}. ${pregunta.pregunta}</p>`;
+                pregunta.opciones.forEach(opcion => {
+                    divPregunta.innerHTML += `
+                        <label>
+                            <input type="radio" name="pregunta${index}" value="${opcion.charAt(0)}"> ${opcion}
+                        </label><br>
+                    `;
+                });
+                examenForm.appendChild(divPregunta);
+            });
+        }
+
+        function verificarRespuestas() {
+            let puntaje = 0;
+            preguntas.forEach((pregunta, index) => {
+                const respuestaSeleccionada = document.querySelector(`input[name="pregunta${index}"]:checked`);
+                if (respuestaSeleccionada && respuestaSeleccionada.value === pregunta.respuesta_correcta) {
+                    puntaje++;
+                }
+            });
+            document.getElementById('resultado').innerText = `Tu puntaje es: ${puntaje} de ${preguntas.length}`;
+        }
+
+        window.onload = generarPreguntas;
+    </script>
+</body>
+</html>
